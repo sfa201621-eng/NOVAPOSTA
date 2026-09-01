@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NP Roleplay</title>
+
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f2f2f2;
+ color:#111;
+}
+
+header{
+ background:#111;
+ color:#fff;
+ padding:16px 22px;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+}
+
+.logo{
+ font-size:25px;
+ font-weight:900;
+}
+
+.logo span{color:#f33}
+
+.badge{
+ font-size:11px;
+ background:#f33;
+ padding:7px 10px;
+ border-radius:7px;
+}
+
+.container{
+ max-width:1250px;
+ margin:20px auto;
+ padding:0 15px;
+}
+
+.layout{
+ display:grid;
+ grid-template-columns:390px 1fr;
+ gap:20px;
+}
+
+.card{
+ background:#fff;
+ border-radius:14px;
+ padding:18px;
+ margin-bottom:20px;
+ box-shadow:0 3px 15px #0001;
+}
+
+h2{margin-top:0}
+
+label{
+ display:block;
+ font-size:13px;
+ font-weight:bold;
+ margin-top:10px;
+}
+
+input,select{
+ width:100%;
+ padding:10px;
+ margin-top:4px;
+ border:1px solid #ccc;
+ border-radius:8px;
+ font-size:14px;
+}
+
+button{
+ border:0;
+ border-radius:8px;
+ padding:11px 14px;
+ font-weight:bold;
+ cursor:pointer;
+}
+
+.btn{
+ background:#111;
+ color:white;
+ width:100%;
+ margin-top:15px;
+}
+
+.btn2{
+ background:#eee;
+ width:100%;
+ margin-top:8px;
+}
+
+.actions{
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap;
+ margin-bottom:12px;
+}
+
+.actions button{
+ background:#111;
+ color:white;
+}
+
+.actions .danger{
+ background:#d22;
+}
+
+table{
+ width:100%;
+ border-collapse:collapse;
+ font-size:13px;
+}
+
+th,td{
+ border-bottom:1px solid #ddd;
+ padding:9px 6px;
+ text-align:left;
+}
+
+th{background:#f5f5f5}
+
+.empty{
+ text-align:center;
+ padding:30px;
+ color:#777;
+}
+
+/* СТОРІНКА ДРУКУ */
+
+#printArea{
+ display:flex;
+ flex-wrap:wrap;
+ gap:8mm;
+ align-items:flex-start;
+}
+
+/* 10 x 15 см */
+
+.label{
+ width:100mm;
+ height:150mm;
+ background:#fff;
+ border:1.5px solid #111;
+ color:#111;
+ position:relative;
+ overflow:hidden;
+ flex:none;
+}
+
+.l-head{
+ display:grid;
+ grid-template-columns:1fr 25mm;
+ border-bottom:1.5px solid #111;
+}
+
+.l-city{
+ padding:4mm;
+ font-size:22px;
+ font-weight:900;
+ line-height:1;
+}
+
+.l-city small{
+ display:block;
+ font-size:11px;
+ margin-top:3mm;
+}
+
+.l-code{
+ border-left:1.5px solid #111;
+ text-align:center;
+ padding:4mm 2mm;
+ font-size:11px;
+ font-weight:bold;
+}
+
+.l-info{
+ padding:3mm;
+ border-bottom:1px solid #111;
+}
+
+.l-title{
+ font-size:8px;
+ font-weight:bold;
+ margin-bottom:1.5mm;
+}
+
+.l-value{
+ font-size:12px;
+ font-weight:bold;
+}
+
+.l-grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ border-bottom:1px solid #111;
+}
+
+.l-box{
+ padding:3mm;
+ min-height:17mm;
+ border-right:1px solid #111;
+}
+
+.l-box:nth-child(2n){
+ border-right:0;
+}
+
+.ttn{
+ font-size:19px;
+ text-align:center;
+ font-weight:900;
+ letter-spacing:1px;
+ padding:3mm 1mm;
+ border-bottom:1px solid #111;
+}
+
+.bar{
+ padding:3mm 5mm;
+ text-align:center;
+}
+
+.bar svg{
+ width:100%;
+ height:38mm;
+}
+
+.disclaimer{
+ position:absolute;
+ bottom:0;
+ left:0;
+ right:0;
+ text-align:center;
+ background:#111;
+ color:#fff;
+ font-size:7px;
+ font-weight:bold;
+ padding:2mm;
+}
+
+.shiftStats{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:8px;
+}
+
+.stat{
+ background:#f5f5f5;
+ padding:12px;
+ border-radius:8px;
+}
+
+.stat b{
+ display:block;
+ font-size:20px;
+ margin-top:3px;
+}
+
+@media(max-width:850px){
+ .layout{grid-template-columns:1fr}
+}
+
+@media print{
+
+ @page{
+   size:A4;
+   margin:8mm;
+ }
+
+ body{
+   background:white;
+ }
+
+ body *{
+   visibility:hidden;
+ }
+
+ #printArea,
+ #printArea *{
+   visibility:visible;
+ }
+
+ #printArea{
+   position:absolute;
+   left:0;
+   top:0;
+   width:194mm;
+   display:flex;
+   flex-wrap:wrap;
+   gap:8mm;
+ }
+
+ .label{
+   width:100mm;
+   height:150mm;
+   page-break-inside:avoid;
+ }
+
+ .noPrint{
+   display:none!important;
+ }
+}
+</style>
+</head>
+
+<body>
+
+<header class="noPrint">
+ <div class="logo">NP <span>ROLEPLAY</span></div>
+ <div class="badge">РОЛЬОВА ГРА</div>
+</header>
+
+<div class="container noPrint">
+
+<div class="layout">
+
+<!-- ЛІВА ПАНЕЛЬ -->
+
+<div>
+
+<div class="card">
+<h2>📦 Нова посилка</h2>
+
+<label>Місто відправлення</label>
+<input id="fromCity" placeholder="Київ">
+
+<label>Відділення відправлення</label>
+<input id="fromOffice" placeholder="123">
+
+<label>Місто отримання</label>
+<input id="toCity" placeholder="Харків">
+
+<label>Відділення отримання</label>
+<input id="toOffice" placeholder="45">
+
+<label>Відправник</label>
+<input id="sender" placeholder="ПІБ">
+
+<label>Телефон відправника</label>
+<input id="senderPhone" placeholder="+380">
+
+<label>Отримувач</label>
+<input id="receiver" placeholder="ПІБ">
+
+<label>Телефон отримувача</label>
+<input id="receiverPhone" placeholder="+380">
+
+<label>Вага, кг</label>
+<input id="weight" type="number" step="0.01" value="1">
+
+<label>Кількість місць</label>
+<input id="places" type="number" value="1">
+
+<label>Оголошена вартість, грн</label>
+<input id="declared" type="number" value="500">
+
+<label>Вартість доставки, грн</label>
+<input id="delivery" type="number" value="80">
+
+<button class="btn" onclick="createParcel()">
+➕ Створити посилку
+</button>
+
+</div>
+
+
+<div class="card">
+<h2>🔫 Сканер</h2>
+
+<input
+ id="scanner"
+ placeholder="Відскануйте штрихкод YuNew"
+ autocomplete="off"
+>
+
+<button class="btn2" onclick="scanner.focus()">
+🎯 Активувати сканер
+</button>
+
+<div id="scanMessage"></div>
+
+</div>
+
+</div>
+
+
+<!-- ПРАВА ПАНЕЛЬ -->
+
+<div>
+
+<div class="card">
+<h2>📊 Поточна зміна</h2>
+
+<div class="shiftStats">
+
+<div class="stat">
+Посилок
+<b id="count">0</b>
+</div>
+
+<div class="stat">
+Вага
+<b id="totalWeight">0 кг</b>
+</div>
+
+<div class="stat">
+Доставка
+<b id="totalMoney">0 грн</b>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>📋 База посилок</h2>
+
+<div class="actions">
+
+<button onclick="selectAll()">
+☑️ Вибрати всі
+</button>
+
+<button onclick="unselectAll()">
+⬜ Зняти вибір
+</button>
+
+<button onclick="printSelected()">
+🖨️ Друкувати вибрані
+</button>
+
+<button onclick="printAll()">
+🖨️ Друкувати всю зміну
+</button>
+
+<button onclick="closeShift()">
+🔒 Закрити зміну
+</button>
+
+</div>
+
+<table>
+
+<thead>
+<tr>
+<th></th>
+<th>ТТН</th>
+<th>Отримувач</th>
+<th>Місто</th>
+<th>Вага</th>
+<th>Статус</th>
+</tr>
+</thead>
+
+<tbody id="parcelTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ТУТ ФОРМУЄТЬСЯ ДРУК -->
+
+<div id="printArea"></div>
+
+
+<script>
+
+/* =========================
+   БАЗА
+========================= */
+
+let parcels =
+ JSON.parse(localStorage.getItem("npRoleplayParcels") || "[]");
+
+let counter =
+ Number(localStorage.getItem("npRoleplayCounter") || 1);
+
+
+/* =========================
+   ТТН
+========================= */
+
+function generateTTN(){
+
+ let n=String(counter).padStart(6,"0");
+
+ counter++;
+
+ localStorage.setItem(
+   "npRoleplayCounter",
+   counter
+ );
+
+ return "20 4500 9000 " + n;
+}
+
+
+/* =========================
+   СТВОРЕННЯ
+========================= */
+
+function createParcel(){
+
+ const p={
+
+  id:Date.now(),
+
+  fromCity:
+   document.getElementById("fromCity").value || "Київ",
+
+  fromOffice:
+   document.getElementById("fromOffice").value || "123",
+
+  toCity:
+   document.getElementById("toCity").value || "Харків",
+
+  toOffice:
+   document.getElementById("toOffice").value || "45",
+
+  sender:
+   document.getElementById("sender").value || "Ігровий відправник",
+
+  senderPhone:
+   document.getElementById("senderPhone").value || "+380000000000",
+
+  receiver:
+   document.getElementById("receiver").value || "Ігровий отримувач",
+
+  receiverPhone:
+   document.getElementById("receiverPhone").value || "+380000000000",
+
+  weight:
+   Number(document.getElementById("weight").value || 1),
+
+  places:
+   Number(document.getElementById("places").value || 1),
+
+  declared:
+   Number(document.getElementById("declared").value || 0),
+
+  delivery:
+   Number(document.getElementById("delivery").value || 0),
+
+  ttn:generateTTN(),
+
+  status:"Створено",
+
+  selected:false,
+
+  created:new Date().toLocaleString("uk-UA")
+ };
+
+ parcels.push(p);
+
+ save();
+
+ renderTable();
+
+ renderStats();
+
+ showLabel(p);
+
+ alert("Посилку створено!");
+
+}
+
+
+/* =========================
+   ЗБЕРЕЖЕННЯ
+========================= */
+
+function save(){
+
+ localStorage.setItem(
+   "npRoleplayParcels",
+   JSON.stringify(parcels)
+ );
+
+}
+
+
+/* =========================
+   ТАБЛИЦЯ
+========================= */
+
+function renderTable(){
+
+ const table =
+ document.getElementById("parcelTable");
+
+ if(!parcels.length){
+
+  table.innerHTML=
+   `<tr>
+     <td colspan="6" class="empty">
+       Посилок ще немає
+     </td>
+   </tr>`;
+
+  return;
+ }
+
+ table.innerHTML=parcels.map(p=>`
+
+ <tr>
+
+ <td>
+ <input
+   type="checkbox"
+   ${p.selected?"checked":""}
+   onchange="toggleSelect(${p.id})"
+ >
+ </td>
+
+ <td><b>${p.ttn}</b></td>
+
+ <td>${escapeHTML(p.receiver)}</td>
+
+ <td>
+ ${escapeHTML(p.toCity)}
+ №${escapeHTML(p.toOffice)}
+ </td>
+
+ <td>${p.weight} кг</td>
+
+ <td>${p.status}</td>
+
+ </tr>
+
+ `).join("");
+
+}
+
+
+/* =========================
+   ВИБІР
+========================= */
+
+function toggleSelect(id){
+
+ const p=parcels.find(x=>x.id===id);
+
+ if(p){
+  p.selected=!p.selected;
+  save();
+ }
+
+}
+
+
+function selectAll(){
+
+ parcels.forEach(p=>p.selected=true);
+
+ save();
+ renderTable();
+
+}
+
+
+function unselectAll(){
+
+ parcels.forEach(p=>p.selected=false);
+
+ save();
+ renderTable();
+
+}
+
+
+/* =========================
+   СТАТИСТИКА
+========================= */
+
+function renderStats(){
+
+ document.getElementById("count").textContent=
+   parcels.length;
+
+ const weight=
+   parcels.reduce((s,p)=>s+Number(p.weight),0);
+
+ const money=
+   parcels.reduce((s,p)=>s+Number(p.delivery),0);
+
+ document.getElementById("totalWeight").textContent=
+   weight.toFixed(2)+" кг";
+
+ document.getElementById("totalMoney").textContent=
+   money+" грн";
+
+}
+
+
+/* =========================
+   СТВОРЕННЯ ЕТИКЕТКИ
+========================= */
+
+function labelHTML(p,index){
+
+ const code=p.ttn.replace(/\s/g,"");
+
+ return `
+
+ <div class="label">
+
+   <div class="l-head">
+
+     <div class="l-city">
+
+       ${escapeHTML(p.toCity).toUpperCase()}
+
+       <small>
+         ВІДДІЛЕННЯ №${escapeHTML(p.toOffice)}
+       </small>
+
+     </div>
+
+     <div class="l-code">
+
+       СК<br>
+       RP${code.slice(-6)}
+
+     </div>
+
+   </div>
+
+
+   <div class="l-info">
+
+     <div class="l-title">
+       ОТРИМУВАЧ
+     </div>
+
+     <div class="l-value">
+       ${escapeHTML(p.receiver)}
+     </div>
+
+     <div style="font-size:10px;margin-top:2mm">
+       ${escapeHTML(p.receiverPhone)}
+     </div>
+
+   </div>
+
+
+   <div class="l-info">
+
+     <div class="l-title">
+       ВІДПРАВНИК
+     </div>
+
+     <div class="l-value">
+       ${escapeHTML(p.sender)}
+     </div>
+
+     <div style="font-size:10px;margin-top:2mm">
+       ${escapeHTML(p.senderPhone)}
+     </div>
+
+   </div>
+
+
+   <div class="l-info">
+
+     <div class="l-title">
+       МАРШРУТ
+     </div>
+
+     <div class="l-value">
+       ${escapeHTML(p.fromCity)},
+       відділення №${escapeHTML(p.fromOffice)}
+       →
+       ${escapeHTML(p.toCity)},
+       №${escapeHTML(p.toOffice)}
+     </div>
+
+   </div>
+
+
+   <div class="l-grid">
+
+     <div class="l-box">
+       <div class="l-title">ВАГА</div>
+       <b>${Number(p.weight).toFixed(2)} кг</b>
+     </div>
+
+     <div class="l-box">
+       <div class="l-title">МІСЦЬ</div>
+       <b>${p.places} / ${p.places}</b>
+     </div>
+
+     <div class="l-box">
+       <div class="l-title">ОГОЛОШЕНО</div>
+       <b>${p.declared} грн</b>
+     </div>
+
+     <div class="l-box">
+       <div class="l-title">ДОСТАВКА</div>
+       <b>${p.delivery} грн</b>
+     </div>
+
+   </div>
+
+
+   <div class="ttn">
+     ${p.ttn}
+   </div>
+
+
+   <div class="bar">
+
+     <svg id="barcode-${p.id}"></svg>
+
+   </div>
+
+
+   <div class="disclaimer">
+     РОЛЬОВА ГРА • НЕ ДЛЯ РЕАЛЬНОГО ВІДПРАВЛЕННЯ
+   </div>
+
+ </div>
+
+ `;
+
+}
+
+
+/* =========================
+   ПОКАЗ ОДНІЄЇ
+========================= */
+
+function showLabel(p){
+
+ const area=
+   document.getElementById("printArea");
+
+ area.innerHTML=
+   labelHTML(p);
+
+ setTimeout(()=>{
+
+   JsBarcode(
+     "#barcode-"+p.id,
+     p.ttn.replace(/\s/g,""),
+     {
+       format:"CODE128",
+       width:1.5,
+       height:110,
+       displayValue:false,
+       margin:0
+     }
+   );
+
+ },50);
+
+}
+
+
+/* =========================
+   ДРУК ВИБРАНИХ
+========================= */
+
+function printSelected(){
+
+ const selected=
+   parcels.filter(p=>p.selected);
+
+ if(!selected.length){
+
+  alert("Вибери хоча б одну посилку.");
+
+  return;
+ }
+
+ printParcels(selected);
+
+}
+
+
+/* =========================
+   ДРУК УСІХ
+========================= */
+
+function printAll(){
+
+ if(!parcels.length){
+
+  alert("У базі немає посилок.");
+
+  return;
+ }
+
+ printParcels(parcels);
+
+}
+
+
+/* =========================
+   ПІДГОТОВКА ДО ДРУКУ
+========================= */
+
+function printParcels(list){
+
+ const area=
+   document.getElementById("printArea");
+
+ area.innerHTML=
+   list.map(p=>labelHTML(p)).join("");
+
+ setTimeout(()=>{
+
+   list.forEach(p=>{
+
+     JsBarcode(
+       "#barcode-"+p.id,
+       p.ttn.replace(/\s/g,""),
+       {
+         format:"CODE128",
+         width:1.5,
+         height:110,
+         displayValue:false,
+         margin:0
+       }
+     );
+
+   });
+
+   setTimeout(()=>{
+     window.print();
+   },300);
+
+ },100);
+
+}
+
+
+/* =========================
+   СКАНЕР
+========================= */
+
+const scanner=
+ document.getElementById("scanner");
+
+
+scanner.addEventListener("keydown",function(e){
+
+ if(e.key!=="Enter") return;
+
+ e.preventDefault();
+
+ const code=
+   scanner.value
+   .replace(/\s/g,"")
+   .trim();
+
+ const parcel=
+   parcels.find(
+     p=>p.ttn.replace(/\s/g,"")===code
+   );
+
+ if(!parcel){
+
+   document.getElementById("scanMessage").innerHTML=
+    `<div style="
+      margin-top:12px;
+      padding:10px;
+      background:#fee;
+      border-radius:8px">
+      ❌ Посилку не знайдено
+    </div>`;
+
+   scanner.select();
+
+   return;
+ }
+
+
+ document.getElementById("scanMessage").innerHTML=
+  `<div style="
+    margin-top:12px;
+    padding:10px;
+    background:#efe;
+    border-radius:8px">
+    ✅ Посилку знайдено<br>
+    <b>${parcel.ttn}</b><br>
+    ${escapeHTML(parcel.receiver)}<br>
+    ${escapeHTML(parcel.toCity)}
+    №${escapeHTML(parcel.toOffice)}<br>
+    📦 ${parcel.status}
+  </div>`;
+
+
+ showLabel(parcel);
+
+ scanner.value="";
+
+});
+
+
+/* =========================
+   ЗАКРИТТЯ ЗМІНИ
+========================= */
+
+function closeShift(){
+
+ if(!parcels.length){
+
+  alert("У зміні немає посилок.");
+
+  return;
+ }
+
+ const ok=
+ confirm(
+ `Закрити зміну?
+
+ Посилок: ${parcels.length}
+ Вага: ${parcels.reduce((s,p)=>s+Number(p.weight),0).toFixed(2)} кг
+
+ Після підтвердження база цієї зміни буде очищена.`
+ );
+
+ if(!ok)return;
+
+ parcels=[];
+
+ save();
+
+ renderTable();
+
+ renderStats();
+
+ document.getElementById("printArea").innerHTML="";
+
+ alert("🔒 Зміну закрито.");
+
+}
+
+
+/* =========================
+   ЗАХИСТ ТЕКСТУ
+========================= */
+
+function escapeHTML(str){
+
+ return String(str)
+   .replaceAll("&","&amp;")
+   .replaceAll("<","&lt;")
+   .replaceAll(">","&gt;")
+   .replaceAll('"',"&quot;")
+   .replaceAll("'","&#039;");
+
+}
+
+
+/* =========================
+   СТАРТ
+========================= */
+
+renderTable();
+renderStats();
+
+</script>
+
+</body>
+</html>
